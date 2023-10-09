@@ -1,0 +1,55 @@
+import kotlin.random.Random
+//Суть задачи - отразить парадокс Монти Холла на языке Kotlin. Посчитать вероятность выигрыша при смене выбора и без смены выбора.
+
+// не меняем выбор
+fun noChange(doors: MutableList<String>): String {
+    doors.shuffle()
+    return doors[Random.nextInt(doors.size)]
+}
+// меняем выбор
+fun change(doors: MutableList<String>): String {
+    doors.shuffle()
+
+    val firstChoice = Random.nextInt(doors.size)
+    var masterChoice = 0
+
+    for (i in doors.indices) {
+        if (i != firstChoice && doors[i] == "k") {
+            masterChoice = i
+            break
+        }
+    }
+
+    for (i in doors.indices) {
+        if (i != firstChoice && i != masterChoice) {
+            return doors[i]
+        }
+    }
+
+    return ""
+}
+
+fun main() {
+    val doors = mutableListOf("k", "k", "a")
+    val N = 1000
+
+    //считаем выигрыши без смены выбора
+    var wins = 0
+    repeat(N) {
+        val result = noChange(doors)
+        if (result == "a") {
+            wins++
+        }
+    }
+    println("Вероятность появления авто за дверью при неизменном выборе: ${wins.toDouble() / N}")
+
+    //считаем выигрыши со сменой выбора
+    wins = 0
+    repeat(N) {
+        val result = change(doors)
+        if (result == "a") {
+            wins++
+        }
+    }
+    println("Вероятность появления авто за дверью при смене выбора: ${wins.toDouble() / N}")
+}
