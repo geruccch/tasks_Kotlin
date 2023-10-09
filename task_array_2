@@ -1,0 +1,56 @@
+import kotlin.random.Random
+//Суть задачи - написать функцию, которая принимает x,y как количество массивов и количество элементов в подмассивах соответственно. Далее, используя рекурсивную функцию,
+//заменить на 2 все значения, равные 0, а также всю прилегающую область.
+fun main() {
+    val x =  Random.nextInt(10)// число массивов
+    val y = Random.nextInt(10) // число элементов в подмассивах
+
+    val array = Array(x) { Array(y) { Random.nextInt(2) } }
+
+    println("Original Array:")
+    printArray(array)
+
+    processArray(array)
+
+    println("\nProcessed Array:")
+    printArray(array)
+}
+
+fun processArray(array: Array<Array<Int>>) {
+    val xSize = array.size
+    val ySize = array[0].size
+
+    for (i in 0 until xSize) {
+        for (j in 0 until ySize) {
+            if (array[i][j] == 0) {
+                changeAdjacentValues(array, i, j, xSize, ySize)
+            }
+        }
+    }
+}
+
+fun changeAdjacentValues(array: Array<Array<Int>>, row: Int, col: Int, xSize: Int, ySize: Int) {
+    if (row < 0 || row >= xSize || col < 0 || col >= ySize || array[row][col] != 0) {
+        return
+    }
+
+    array[row][col] = 2
+
+    changeAdjacentValues(array, row - 1, col, xSize, ySize) // сверху
+    changeAdjacentValues(array, row + 1, col, xSize, ySize) // снизу
+    changeAdjacentValues(array, row, col - 1, xSize, ySize) // слева
+    changeAdjacentValues(array, row, col + 1, xSize, ySize) // справа
+    changeAdjacentValues(array, row - 1, col - 1, xSize, ySize) // сверху слева
+    changeAdjacentValues(array, row - 1, col + 1, xSize, ySize) // сверху справа
+    changeAdjacentValues(array, row + 1, col - 1, xSize, ySize) // снизу слева
+    changeAdjacentValues(array, row + 1, col + 1, xSize, ySize) // снизу справа
+}
+
+fun printArray(array: Array<Array<Int>>) {
+    for (row in array) {
+        for (element in row) {
+            print("$element ")
+        }
+        println()
+    }
+}
