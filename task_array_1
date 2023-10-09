@@ -1,0 +1,42 @@
+import kotlin.random.Random
+//Cуть задачи - отсортировать двумерный массив пузырьком
+fun main(){
+    sortArray(5,5)
+}
+
+fun sortArray(x:Int,y:Int){
+    val array = Array(x){IntArray(y){Random.nextInt(10,100)} }
+    println("Исходный массив: ")
+
+    for(row in array){
+        println(row.joinToString())
+    }
+
+    val onearray = array.flatMap { it.toList() }.toMutableList()
+
+    for(i in 0 until onearray.size - 1){
+        for(j in 0 until onearray.size - i - 1){
+            if(onearray[j]>onearray[j+1]){
+                val temp = onearray[j]
+                onearray[j] = onearray[j+1]
+                onearray[j+1] = temp
+            }
+        }
+    }
+
+    val sortedArr = Array(x){IntArray(y)}
+    var index = 0
+    for (i in 0 until x){
+        for (j in 0 until y){
+            sortedArr[i][j] = onearray[index]
+            index++
+
+        }
+    }
+
+    println("\nОтсортированный массив: ")
+
+    for(row in sortedArr){
+        println(row.joinToString())
+    }
+}
